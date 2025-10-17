@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { TrendingUp, TrendingDown, AlertTriangle, DollarSign, Activity, RefreshCw } from 'lucide-react';
+import { TrendingUp, TrendingDown, AlertTriangle, DollarSign, Activity, RefreshCw, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 import RatioChart from './RatioChart';
 import SpreadChart from './SpreadChart';
 import MetricCard from './MetricCard';
@@ -172,9 +173,18 @@ export default function MarketDashboard() {
             <p className="text-gray-600 dark:text-gray-300">
               实时监控标普500/黄金比率与债券利差,精准把握市场风险
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-              最后更新: {marketData.current.date}
-            </p>
+            <div className="flex items-center gap-4 mt-2">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                最后更新: {marketData.current.date}
+              </p>
+              <Link 
+                href="/a-share"
+                className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+              >
+                切换到A股追踪器
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
           <div className="flex gap-2 flex-wrap">
             <CalculationModal 
