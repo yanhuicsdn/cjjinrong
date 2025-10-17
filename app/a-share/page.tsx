@@ -5,6 +5,8 @@ import { TrendingUp, TrendingDown, AlertTriangle, DollarSign, Activity, RefreshC
 import Link from 'next/link';
 import MetricCard from '@/components/MetricCard';
 import ExportButton from '@/components/ExportButton';
+import AShareRatioChart from '@/components/AShareRatioChart';
+import VolatilityChart from '@/components/VolatilityChart';
 
 interface AShareData {
   current: {
@@ -63,6 +65,11 @@ interface BondData {
     color: string;
     description: string;
   };
+  historicalData: Array<{
+    date: string;
+    volatility: number;
+    bondYield: number;
+  }>;
   note: string;
 }
 
@@ -489,6 +496,15 @@ export default function ASharePage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 gap-8 mb-8">
+        <AShareRatioChart data={aShareData.fullHistoricalData} />
+        <VolatilityChart 
+          data={bondData.historicalData} 
+          currentVolatility={parseFloat(bondData.current.volatility)}
+        />
       </div>
 
       {/* Info Note */}
