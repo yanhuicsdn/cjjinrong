@@ -7,6 +7,7 @@ import SpreadChart from './SpreadChart';
 import MetricCard from './MetricCard';
 import ExportButton from './ExportButton';
 import CalculationModal from './CalculationModal';
+import BubbleIndexCard from './BubbleIndexCard';
 
 interface MarketData {
   current: {
@@ -243,6 +244,15 @@ export default function MarketDashboard() {
           color="green"
         />
       </div>
+
+      {/* Bubble Index Card */}
+      <BubbleIndexCard
+        ratio={marketData.current.ratio}
+        zScore={marketData.statistics.zScore}
+        mean={marketData.statistics.mean}
+        max={marketData.statistics.max}
+        spreadTrend={spreadData.statistics.trend30d}
+      />
 
       {/* Risk Alerts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
