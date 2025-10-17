@@ -91,16 +91,33 @@ export async function GET(request: Request) {
       riskDescription = '市场波动率较低,相对平稳';
     }
     
-    // 构建历史数据
+    // 构建历史数据 - 计算滚动波动率
     const historicalData = [];
-    for (let i = 0; i < timestamps.length; i++) {
+    const windowSize = 30; // 30日滚动窗口
+    
+    for (let i = windowSize; i < timestamps.length; i++) {
       if (prices[i]) {
         const date = new Date(timestamps[i] * 1000).toISOString().split('T')[0];
-        historicalData.push({
-          date,
-          volatility: volatility, // 简化处理,实际应该计算每日的波动率
-          bondYield: simulatedBondYield,
-        });
+        
+        // 计算过去30天的波动率
+        const windowReturns = [];
+        for (let j = i - windowSize + 1; j <= i; j++) {
+          if (prices[j] && prices[j-1] && prices[j-1] > 0) {
+            windowReturns.push((prices[j] - prices[j-1]) / prices[j-1]);
+          }
+        }
+        
+        if (windowReturns.length > 0) {
+          const windowAvg = windowReturns.reduce((a, b) => a + b, 0) / windowReturns.length;
+          const windowVar = windowReturns.reduce((a, b) => a + Math.pow(b - windowAvg, 2), 0) / windowReturns.length;
+          const windowVol = Math.sqrt(windowVar * 252) * 100; // 年化波动率
+          
+          historicalData.push({
+            date,
+            volatility: windowVol,
+            bondYield: simulatedBondYield,
+          });
+        }
       }
     }
     
