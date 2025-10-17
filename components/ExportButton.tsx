@@ -2,8 +2,12 @@
 
 import { Download } from 'lucide-react';
 
+interface DataRow {
+  [key: string]: string | number;
+}
+
 interface ExportButtonProps {
-  data: any;
+  data: DataRow[];
   filename: string;
   label?: string;
 }
@@ -27,7 +31,7 @@ export default function ExportButton({ data, filename, label = '导出数据' }:
     document.body.removeChild(link);
   };
 
-  const convertToCSV = (data: any) => {
+  const convertToCSV = (data: DataRow[]) => {
     if (!data || !Array.isArray(data) || data.length === 0) {
       return '';
     }

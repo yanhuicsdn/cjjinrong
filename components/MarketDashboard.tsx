@@ -80,10 +80,6 @@ export default function MarketDashboard() {
   const [error, setError] = useState<string | null>(null);
   const [selectedPeriod, setSelectedPeriod] = useState('5y');
 
-  useEffect(() => {
-    fetchData();
-  }, [selectedPeriod]);
-
   const fetchData = async () => {
     setLoading(true);
     setError(null);
@@ -113,6 +109,11 @@ export default function MarketDashboard() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedPeriod]);
 
   const getRiskColor = (color: string) => {
     const colors: Record<string, string> = {
