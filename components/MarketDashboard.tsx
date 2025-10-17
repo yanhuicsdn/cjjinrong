@@ -6,6 +6,7 @@ import RatioChart from './RatioChart';
 import SpreadChart from './SpreadChart';
 import MetricCard from './MetricCard';
 import ExportButton from './ExportButton';
+import CalculationModal from './CalculationModal';
 
 interface MarketData {
   current: {
@@ -174,7 +175,11 @@ export default function MarketDashboard() {
               最后更新: {marketData.current.date}
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
+            <CalculationModal 
+              marketData={marketData}
+              spreadData={spreadData}
+            />
             <button
               onClick={fetchData}
               disabled={loading}

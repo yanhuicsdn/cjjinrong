@@ -7,15 +7,25 @@ async function fetchYahooFinance(symbol: string, range: string = '5y', interval:
   try {
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0'
-      }
+        'User-Agent': 'Mozilla/5.0',
+        'Accept': 'application/json'
+      },
+      next: { revalidate: 300 } // 缓存5分钟
     });
     
     if (!response.ok) {
-      throw new Error(`Failed to fetch ${symbol}`);
+      const errorText = await response.text();
+      console.error(`Failed to fetch ${symbol}: ${response.status} ${response.statusText}`, errorText);
+      throw new Error(`Failed to fetch ${symbol}: ${response.status}`);
     }
     
     const data = await response.json();
+    
+    if (!data.chart || !data.chart.result || !data.chart.result[0]) {
+      console.error(`Invalid data structure for ${symbol}:`, JSON.stringify(data).substring(0, 200));
+      throw new Error(`Invalid data structure for ${symbol}`);
+    }
+    
     return data.chart.result[0];
   } catch (error) {
     console.error(`Error fetching ${symbol}:`, error);
